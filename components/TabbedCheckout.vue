@@ -14,11 +14,11 @@
         @closedialog="$emit('closedialog')"
       />
       <v-card v-if="noTabs" flat>
-        <v-card-title class="justify-center"> Empty </v-card-title>
+        <v-card-title class="justify-center"> 無資料 </v-card-title>
         <v-card-text class="d-flex justify-center">
-          No payment methods available<br />
-          It probably means that there was an error on invoice creation.<br />
-          Please check server logs
+          沒有可用的付款方式<br />
+          這可能意味著在創建發票時出現了錯誤。<br />
+          請要求客服人員確認相關紀錄。      
         </v-card-text>
       </v-card>
       <div v-else>
@@ -53,8 +53,8 @@
               <p class="my-auto px-3 white--text text-subtitle-2">
                 {{
                   expiringSoon
-                    ? "Invoice expiring soon..."
-                    : "Awaiting payment..."
+                    ? "發票即將過期..."
+                    : "等待付款中..."
                 }}
               </p>
               <v-spacer />
@@ -145,7 +145,7 @@
             <div v-if="showDetails">
               <v-list-item>
                 <v-list-item-content>
-                  <v-list-item-title>Order amount</v-list-item-title>
+                  <v-list-item-title>訂單總金額</v-list-item-title>
                 </v-list-item-content>
                 <v-list-item-action>
                   <v-list-item-title
@@ -174,7 +174,7 @@
               </v-list-item>
               <v-list-item>
                 <v-list-item-content>
-                  <v-list-item-title>Already paid</v-list-item-title>
+                  <v-list-item-title>已經付款</v-list-item-title>
                 </v-list-item-content>
                 <v-list-item-action>
                   <v-list-item-title
@@ -191,7 +191,7 @@
               </v-list-item>
               <v-list-item v-if="networkFeeIncluded">
                 <v-list-item-content>
-                  <v-list-item-title>Network cost</v-list-item-title>
+                  <v-list-item-title>網路費用</v-list-item-title>
                 </v-list-item-content>
                 <v-list-item-action>
                   <v-list-item-title
@@ -262,10 +262,10 @@
                     <v-card flat>
                       <v-card-text>
                         <p class="d-flex justify-center text-h5">
-                          Choose the way to pay
+                          選擇支付方式
                         </p>
                         <p class="d-flex justify-center">
-                          Enter the address you will send from
+                          輸入您將發送資金的錢包地址
                         </p>
                         <v-tooltip bottom class="ma-0 pa-0">
                           <template #activator="{ on, attrs }">
@@ -277,25 +277,18 @@
                               "
                               v-on="on"
                             >
-                              Why are we asking for your wallet address?
+                              為什麼我們要詢問您的錢包地址？
                             </p>
                           </template>
                           <p class="ma-0 pa-0">
-                            Because we want to guarantee a smooth refund process
-                            in case you want to get your money back. <br />
-                            We do not accept money from Binance and other
-                            exchanges, so you need to send your funds to your
-                            own wallet first.<br />
-                            Asking for your wallet address helps to prevent
-                            careless users sending us money from exchanges which
-                            often results in failed expired payments. <br />
-                            Only funds sent from the specified wallet address
-                            will be taken into account for your invoice.
+                            我們不接受來自交易所錢包的資金，所以您需要先將您的資金轉到您自己的錢包。<br />
+                            詢問您的錢包地址有助於防止粗心的用戶從交易所發送資金給我們，這往往會導致支付失敗或過期。<br />
+                            只有從您指定的錢包地址發送的資金才會被計入您的付款中。
                           </p>
                         </v-tooltip>
                         <v-text-field
                           v-model="inputPaymentAddress"
-                          label="Your address"
+                          label="您的錢包地址"
                           :error-messages="paymentAddressErrors"
                           :rules="[rules.required]"
                         />
@@ -414,7 +407,7 @@
                                     v-else
                                     color="primary"
                                     @click="openInWallet(paymentURL)"
-                                    >Open in wallet</v-btn
+                                    >在錢包中打開</v-btn
                                   >
                                 </UIExtensionSlot>
                               </v-row>
@@ -459,12 +452,12 @@
                                   />
                                   <display-field
                                     v-if="itemv.lightning"
-                                    title="Node Info"
+                                    title="節點資訊"
                                     :value="itemv.node_id"
                                   />
                                   <display-field
                                     v-else
-                                    title="Payment Link"
+                                    title="付款連結"
                                     :value="itemv.payment_url"
                                   />
                                 </UIExtensionSlot>
@@ -513,13 +506,11 @@
                           Contact & Refund Email
                         </p>
                         <p class="d-flex justify-center">
-                          Please provide an email address below. We will contact
-                          you at this address if there is an issue with your
-                          payment.
+                          請提供您的電子郵件，若有問題，我們會通過該方式聯繫您。
                         </p>
                         <v-text-field
                           v-model="inputEmail"
-                          label="Your email"
+                          label="您的電子郵件"
                           :rules="[rules.required, rules.email]"
                         />
                       </v-card-text>
@@ -557,22 +548,21 @@
                     <v-card flat>
                       <v-card-text>
                         <p class="d-flex justify-center text-h5">
-                          Shipping address & notes
+                          寄送地址與註記
                         </p>
                         <p class="d-flex justify-center">
-                          Please provide your shipping address below. You may
-                          leave additional notes regarding your order.
+                          請在下面提供您的送貨地址，您可以留下有關您的訂單的附加註記。
                         </p>
                         <v-textarea
                           v-model="inputAddress"
-                          label="Shipping address"
+                          label="送貨地址"
                           :rules="[rules.required]"
                           :rows="3"
                           no-resize
                         />
                         <v-textarea
                           v-model="inputNotes"
-                          label="Notes"
+                          label="註記"
                           :rows="3"
                           no-resize
                         />
